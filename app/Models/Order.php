@@ -19,6 +19,7 @@ class Order extends Model
         'client_phone',
         'client_address',
         'total',
+        'delivered',
     ];
 
     public function user(): BelongsTo

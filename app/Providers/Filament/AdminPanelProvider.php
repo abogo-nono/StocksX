@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Resources\OrderResource\Widgets\OrdersChart;
+use App\Filament\Resources\UserResource\Widgets\UserOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -41,9 +42,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                // Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
-                // OrdersChart::class,
+                UserOverview::class,
+                OrdersChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -65,7 +65,6 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 'Stocks Management',
                 'Users Management'
-            ])
-            ->spa();
+            ]);
     }
 }

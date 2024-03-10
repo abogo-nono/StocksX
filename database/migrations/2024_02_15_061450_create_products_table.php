@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('slug')->unique(Product::class);
             $table->string('image')->nullable();
-            $table->decimal('price', 8, 2);
+            $table->decimal('price', 8, 2, true);
             $table->integer('quantity');
             $table->foreignId('product_categories_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('product_suppliers_id')->constrained()->onDelete('cascade')->onUpdate('cascade');

@@ -132,6 +132,12 @@ class OrderResource extends Resource
                                 self::updateTotals($get, $set);
                             }),
                     ]),
+                Section::make('Delivered')
+                    ->description('The client had paid and got his products')
+                    ->hiddenOn(['create', 'edit'])
+                    ->schema([
+                        Forms\Components\Toggle::make('delivered')
+                    ])
             ]);
     }
 
@@ -139,7 +145,8 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name'),
+                TextColumn::make('user.name')
+                    ->label('Cashier'),
                 TextColumn::make('client_name')
                     ->searchable(),
                 TextColumn::make('client_phone')
@@ -165,6 +172,7 @@ class OrderResource extends Resource
                 TextColumn::make('total')
                     ->money('XFA')
                     ->summarize(Sum::make()),
+                Tables\Columns\ToggleColumn::make('delivered')
             ])
             ->filters([
                 TrashedFilter::make(),

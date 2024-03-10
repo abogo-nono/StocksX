@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("client_phone");
             $table->string("client_address");
             $table->decimal('total', 8, 2);
+            $table->boolean('delivered')->default(false);
             $table->timestamps();
             $table->softDeletes();
 
