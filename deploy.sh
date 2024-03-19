@@ -94,7 +94,7 @@ echo "||------------------------------------------------------------------"
 echo "||====== Serving the app"
 echo "||------------------------------------------------------------------"
 echo "Username: admin@example.com"
-echo "Password: 12345"
+echo "Password: 12345678"
 echo
 echo "By default this user will be the superadmin on the app"
 php artisan serve

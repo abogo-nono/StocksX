@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OrderResource\Widgets\OrdersChart;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Order;
@@ -20,6 +19,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -35,6 +35,7 @@ use App\Filament\Resources\OrderResource\Pages\ViewOrder;
 use App\Filament\Resources\OrderResource\Pages\ListOrders;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Filament\Resources\OrderResource\Pages\CreateOrder;
+use App\Filament\Resources\OrderResource\Widgets\OrdersChart;
 use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 
 class OrderResource extends Resource
@@ -150,10 +151,12 @@ class OrderResource extends Resource
                 TextColumn::make('client_name')
                     ->searchable(),
                 TextColumn::make('client_phone')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('client_address')
                     ->searchable()
-                    ->limit(20),
+                    ->limit(20)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('total')
                     ->money('XFA')
                     ->sortable(),
@@ -172,14 +175,14 @@ class OrderResource extends Resource
                 TextColumn::make('total')
                     ->money('XFA')
                     ->summarize(Sum::make()),
-                Tables\Columns\ToggleColumn::make('delivered')
+                ToggleColumn::make('delivered'),
             ])
             ->filters([
                 TrashedFilter::make(),
             ])
             ->actions([
                 ViewAction::make(),
-                EditAction::make(),
+                // EditAction::make(),
                 DeleteAction::make(),
             ])
             ->bulkActions([
@@ -204,7 +207,7 @@ class OrderResource extends Resource
             'index' => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
             'view' => Pages\ViewOrder::route('/{record}'),
-            'edit' => Pages\EditOrder::route('/{record}/edit'),
+            // 'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
     }
 

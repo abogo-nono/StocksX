@@ -73,6 +73,7 @@
 <p> <code>php artisan db:seed</code></p>
 
 #### configure roles and privileges
+
 <p>
     `php artisan make:filament-user`
         -> `admin` for username
