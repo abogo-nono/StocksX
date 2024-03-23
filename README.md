@@ -81,9 +81,9 @@
         -> `admin` for password
 </p>
 <p>
-    <code> shield:install --fresh </code> <br>
-    <code> shield:generate --all </code> <br>
-    <code> shield:super-admin --user=1 </code>
+    <code>php artisan shield:install --fresh </code> <br>
+    <code>php artisan shield:generate --all </code> <br>
+    <code>php artisan shield:super-admin --user=1 </code>
 </p>
 
 #### Setup storage
