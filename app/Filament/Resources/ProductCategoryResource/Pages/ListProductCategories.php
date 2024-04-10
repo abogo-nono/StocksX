@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ProductCategoryResource\Pages;
 
 use App\Filament\Resources\ProductCategoryResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 
 class ListProductCategories extends ListRecords
