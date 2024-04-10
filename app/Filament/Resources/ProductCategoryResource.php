@@ -46,7 +46,7 @@ class ProductCategoryResource extends Resource
         return $form
             ->schema([
                 Section::make('New category details!')
-                    ->description('Fill the form properly to create a new product category')
+                    ->description('Fill the form properly to create a new category for product')
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->required()
@@ -56,7 +56,8 @@ class ProductCategoryResource extends Resource
                         Forms\Components\TextInput::make('slug')
                             ->required()
                             ->maxLength(255)
-                            ->unique('product_categories', ignoreRecord: true),
+                            ->readOnly(true)
+                            ->unique('product_categories', ignoreRecord: true)
                     ])
                     ->columns(2),
             ]);
@@ -69,7 +70,7 @@ class ProductCategoryResource extends Resource
                 TextColumn::make('title')
                     ->searchable(),
                 TextColumn::make('slug')
-                    ->searchable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -87,7 +88,6 @@ class ProductCategoryResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
             ])
@@ -112,8 +112,7 @@ class ProductCategoryResource extends Resource
         return [
             'index' => Pages\ListProductCategories::route('/'),
             'create' => Pages\CreateProductCategory::route('/create'),
-            // 'view' => Pages\ViewProductCategory::route('/{record}'),
-            'edit' => Pages\EditProductCategory::route('/{record}/edit'),
+            // 'edit' => Pages\EditProductCategory::route('/{record}/edit'),
         ];
     }
 
