@@ -16,6 +16,8 @@ class CreateProductCategory extends CreateRecord
         return Notification::make()
             ->success()
             ->title("Category created")
-            ->body("The product category has been created successfully.");
+            ->body("The product category has been created successfully.")
+            ->icon('heroicon-o-bookmark')
+            ->color('success');
     }
 }

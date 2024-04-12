@@ -22,6 +22,8 @@ class EditProductCategory extends EditRecord
         return Notification::make()
             ->success()
             ->title("Category updated")
-            ->body("The product category has been updated successfully.");
+            ->body("The product category has been updated successfully.")
+            ->icon('heroicon-o-bookmark')
+            ->color('success');
     }
 }
