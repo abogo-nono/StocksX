@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\ProductSupplierResource\Pages;
 
-use App\Filament\Resources\ProductSupplierResource;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\ProductSupplierResource;
 
 class EditProductSupplier extends EditRecord
 {
@@ -18,5 +19,16 @@ class EditProductSupplier extends EditRecord
             Actions\ForceDeleteAction::make(),
             Actions\RestoreAction::make(),
         ];
+    }
+
+
+    protected function getSavedNotification(): ?Notification
+    {
+        return Notification::make()
+            ->success()
+            ->title("Supplier update")
+            ->body("The supplier has been updated successfully.")
+            ->icon('heroicon-o-queue-list')
+            ->color('success');
     }
 }
