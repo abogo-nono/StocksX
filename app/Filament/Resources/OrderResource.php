@@ -35,6 +35,7 @@ use App\Filament\Resources\OrderResource\Pages\ViewOrder;
 use App\Filament\Resources\OrderResource\Pages\ListOrders;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Filament\Resources\OrderResource\Pages\CreateOrder;
+use AymanAlhattami\FilamentDateScopesFilter\DateScopeFilter;
 use App\Filament\Resources\OrderResource\Widgets\OrdersChart;
 use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 
@@ -98,7 +99,8 @@ class OrderResource extends Resource
                                 TextInput::make('quantity')
                                     ->default(1)
                                     ->integer()
-                                    ->required(),
+                                    ->required()
+                                    ->minValue(1),
                                 TextInput::make('price')
                                     ->numeric()
                                     ->prefix('XFA')
@@ -179,6 +181,7 @@ class OrderResource extends Resource
             ])
             ->filters([
                 TrashedFilter::make(),
+                DateScopeFilter::make('created_at'),
             ])
             ->actions([
                 ViewAction::make(),
