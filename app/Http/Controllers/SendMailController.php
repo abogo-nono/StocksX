@@ -24,11 +24,10 @@ class SendMailController extends Controller
         ];
 
 
-        try {
-            Mail::to($user[0]->email)->send(new SampleMail($content));
-        } catch (\Exception $e){
-
+        if ($products->count() > 0) {
+            	Mail::to($user[0]->email)->send(new SampleMail($content));
         }
+
         // return view('emails.low-stocks')->with(['products' => $products, 'user' => $user]);
 
         return to_route('filament.admin.auth.login');
