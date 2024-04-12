@@ -2,9 +2,12 @@
 
 namespace App\Filament\Resources\OrderResource\Pages;
 
+use App\Models\Order;
 use Filament\Actions;
+use Filament\Resources\Components\Tab;
 use App\Filament\Resources\OrderResource;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListOrders extends ListRecords
 {
@@ -16,11 +19,4 @@ class ListOrders extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
-
-    // protected function getHeaderWidgets(): array
-    // {
-    //     return [
-    //         OrderResource\Widgets\OrdersChart::class,
-    //     ];
-    // }
 }

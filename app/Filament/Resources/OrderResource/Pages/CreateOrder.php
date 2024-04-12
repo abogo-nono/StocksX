@@ -12,6 +12,16 @@ class CreateOrder extends CreateRecord
 {
     protected static string $resource = OrderResource::class;
 
+    protected function getCreatedNotification(): ?Notification
+    {
+        return Notification::make()
+            ->success()
+            ->title("Order created")
+            ->body("The Order has been created successfully.")
+            ->icon('heroicon-o-document-text')
+            ->color('success');
+    }
+
     protected function beforeCreate(): void
     {
         // dd($this->data['orderProducts']);
