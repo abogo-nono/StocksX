@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,10 +16,16 @@ class ProductSupplier extends Model
         'name',
         'email',
         'phone',
+        'category',
     ];
 
     public function product(): BelongsTo
     {
         return $this->belongsTo(ProductSupplier::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(ProductCategory::class);
     }
 }
