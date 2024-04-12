@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use Filament\Pages;
+use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
@@ -28,17 +29,19 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('stocks-manager')
             ->login()
             ->profile()
+            ->registration()
             ->emailVerification()
             ->passwordReset()
             ->colors([
-                'primary' => Color::Pink,
+                'primary' => Color::Cyan,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
+                Pages\Dashboard::class
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -65,6 +68,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 'Stocks Management',
                 'Users Management'
-            ]);
+            ])
+            ->spa();
     }
 }
