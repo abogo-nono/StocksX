@@ -5,16 +5,20 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Product;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
-use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use App\Models\ProductCategory;
+use App\Models\ProductSupplier;
 use Filament\Resources\Resource;
+use Illuminate\Support\Collection;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProductResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -37,20 +41,14 @@ class ProductResource extends Resource
                 Section::make('Supplier')
                     ->description('Product supplier and category')
                     ->schema([
-                        Select::make('product_categories_id')
+                        Select::make('product_suppliers_id')
                             ->label('Supplier Name')
                             ->relationship(name: 'supplier', titleAttribute: 'name')
                             ->preload()
                             ->searchable()
                             ->native(false)
-                            ->required(),
-                        Select::make('product_suppliers_id')
-                            ->label('Product Category')
-                            ->relationship(name: 'category', titleAttribute: 'title')
-                            ->preload()
-                            ->searchable()
-                            ->native(false)
-                            ->required(),
+                            ->required()
+                            ->columnSpanFull(),
                     ])
                     ->columns(2)
                     ->collapsible()
@@ -106,17 +104,17 @@ class ProductResource extends Resource
                     ->numeric()
                     ->sortable()
                     ->badge()
-                    // ->color(fn(string $state): string => match ($state) {
-                    //     'quantity' > '10' => 'success',
-                    //     'quantity' < '5' => 'warning',
-                    //     'quantity' < '10' => 'info',
-                    // })
-                    ,
+                // ->color(fn(string $state): string => match ($state) {
+                //     'quantity' > '10' => 'success',
+                //     'quantity' < '5' => 'warning',
+                //     'quantity' < '10' => 'info'
+                // })
+                ,
                 Tables\Columns\TextColumn::make('supplier.name')
                     ->searchable()
-                    ->sortable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('category.title')
-                    ->sortable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('slug')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
