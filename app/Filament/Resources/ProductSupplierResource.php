@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Select;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Actions\DeleteAction;
@@ -59,8 +61,16 @@ class ProductSupplierResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),
+                        Select::make('category')
+                            ->relationship('category', 'title')
+                            // ->multiple()
+                            ->native(false)
+                            ->preload()
+                            ->columnSpanFull()
+                            ->required()
                     ])
                     ->columns(3),
+
             ]);
     }
 
