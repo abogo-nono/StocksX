@@ -52,7 +52,7 @@ Before starting the deployment process, ensure the following requirements are me
 #### Clone the Repository
 
 ```bash
-git clone https://github.com/oi/StocksX.git
+git clone https://github.com/abogo-nono/StocksX.git
 ```
 
 #### Change Directory
