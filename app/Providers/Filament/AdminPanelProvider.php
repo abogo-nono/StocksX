@@ -69,6 +69,10 @@ class AdminPanelProvider extends PanelProvider
                 'Stocks Management',
                 'Users Management'
             ])
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->brandLogo(asset('images/logo.png'))
+            ->brandName('Stocks X')
+            ->favicon(asset(asset('images/logo.png')))
             ->spa();
     }
 }
