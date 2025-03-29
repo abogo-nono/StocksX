@@ -1,67 +1,99 @@
 # StockX - Stocks Management System
 
----
+## Overview
 
-## How It Works
-
-The Stocks Management System provides a user-friendly interface for managing all aspects of your inventory. Users can register or log in to access the system's functionalities. Once logged in, users can navigate through the dashboard to perform various tasks such as managing product categories, suppliers, products, orders, roles, and users.
-
-Users can create, update, list, soft-delete, and delete entities as per their requirements. They can also assign roles to users to control their access permissions within the system. Additionally, users will receive email notifications when products need to be restocked, ensuring timely replenishment of inventory.
+StockX is a comprehensive inventory management system designed to streamline the process of managing products, suppliers, orders, and users. It provides a user-friendly interface with robust features to ensure efficient inventory tracking and management. The system also includes role-based access control, dynamic filtering, global search, and email notifications for low stock alerts, making it a powerful tool for businesses of all sizes.
 
 ## Features
 
-StockX, offering the following features:
+StockX offers the following features:
 
-- **Product Category Management**: Allows users to create, update, list, soft-delete, and delete product categories.
-- **Product Supplier Management**: Provides functionalities to manage product suppliers including creating, updating, listing, soft-deleting, and deleting.
-- **Product Management**: Enables users to manage products by creating, updating, listing, soft-deleting, and deleting them.
-- **Order Management**: Facilitates order management by allowing users to create, update, list, soft-delete, and delete orders.
-- **Roles Management**: Offers role management functionalities such as creating, updating, listing, soft-deleting, and deleting roles.
-- **User Management**: Provides user management features including creating, updating, listing, soft-deleting, and deleting users. Users can also be assigned roles.
-- **Full Functional Auth System**: Implements a robust authentication system ensuring secure access to the system's functionalities.
-- **Email Notification**: Sends email notifications when a product needs to be restocked, ensuring timely replenishment of inventory.
+### Inventory Management
+- **Product Categories**: Create, update, list, soft-delete, and delete product categories.
+- **Product Suppliers**: Manage suppliers with functionalities to create, update, list, soft-delete, and delete supplier records.
+- **Products**: Add, update, list, soft-delete, and delete products with detailed information such as price, quantity, supplier, and category.
 
-## Gallery
+### Order Management
+- **Order Creation and Tracking**: Create, update, list, soft-delete, and delete orders.
+- **Stock Validation**: Automatically validate stock availability during order creation and editing.
+- **Dynamic Stock Adjustment**: Automatically adjust product stock based on order changes.
+- **Low Stock Alerts**: Notify the admin when product stock falls below a predefined threshold.
+
+### User and Role Management
+- **User Management**: Create, update, list, soft-delete, and delete users. Assign roles to control access permissions.
+- **Role-Based Access Control**: Manage roles and permissions using the Filament Shield plugin.
+
+### Notifications
+- **Email Alerts**: Automatically send email notifications to the admin for low stock products.
+
+### Dashboard and Analytics
+- **Dynamic Charts**: Visualize order trends and inventory statistics with interactive charts.
+- **Quick Stats**: View key metrics such as total users, products, orders, and low stock items.
+
+### Filters and Tabs
+- **Order Filters**: Filter orders by time periods such as today, yesterday, this week, this month, last month, this year, and last year.
+- **Supplier Tabs**: View suppliers categorized by product categories for better organization.
+
+### Global Search
+- **Searchable Attributes**: Search across products, orders, and suppliers using attributes like name, price, quantity, and category.
+- **Search Result Details**: Display additional details like category, price, and stock status in search results.
+- **Quick Navigation**: Link search results to their respective pages for easy access.
+
+### Authentication and Security
+- **Full Authentication System**: Secure login and registration with email verification.
+- **Role-Based Access Control**: Restrict access to specific features based on user roles.
+
+## Screenshots
 
 Here are some screenshots showcasing the StockX application:
 
-- <img src="./screenshots/Screenshot 2024-04-12 at 14-03-26 Dashboard - StocksX.png" alt="Dashboard - StocksX">
-- <img src="./screenshots/Screenshot 2024-04-12 at 14-04-41 Products - StocksX.png" alt="Products - StocksX">
-- <img src="./screenshots/Screenshot 2024-04-12 at 14-05-06 Orders - StocksX.png" alt="Orders - StocksX">
-- <img src="./screenshots/Screenshot 2024-04-12 at 14-05-36 Create Order - StocksX.png" alt="Create Order - StocksX">
-- <img src="./screenshots/Screenshot 2024-04-12 at 14-06-02 Roles - StocksX.png" alt="Roles - StocksX">
-- <img src="./screenshots/Screenshot 2024-04-12 at 14-06-12 Create Role - StocksX.png" alt="Create Role - StocksX">
-- <img src="./screenshots/Screenshot 2024-04-12 at 14-06-31 Edit cashier - StocksX.png" alt="Edit cashier - StocksX">
+- **Dashboard**  
+  ![Dashboard](./screenshots/Screenshot%202024-04-12%20at%2014-03-26%20Dashboard%20-%20StocksX.png)
 
-## How to Deploy StockX Locally?
+- **Products**  
+  ![Products](./screenshots/Screenshot%202024-04-12%20at%2014-04-41%20Products%20-%20StocksX.png)
 
-To deploy this app, follow these steps. Ensure you follow each step to avoid errors.
+- **Orders**  
+  ![Orders](./screenshots/Screenshot%202024-04-12%20at%2014-05-06%20Orders%20-%20StocksX.png)
 
-### Requirements
+- **Create Order**  
+  ![Create Order](./screenshots/Screenshot%202024-04-12%20at%2014-05-36%20Create%20Order%20-%20StocksX.png)
 
-Before starting the deployment process, ensure the following requirements are met:
+- **Roles**  
+  ![Roles](./screenshots/Screenshot%202024-04-12%20at%2014-06-02%20Roles%20-%20StocksX.png)
 
-- `php` version >= 8.2
-- `composer` version >= 2.3
-- `nodejs` version >= 18.8.0
-- `npm` version >= 8.18.0
-- `mailpit`
+- **Edit Role**  
+  ![Edit Role](./screenshots/Screenshot%202024-04-12%20at%2014-06-31%20Edit%20cashier%20-%20StocksX.png)
 
-### Installation
+## Deployment Guide
 
-#### Clone the Repository
+Follow these steps to deploy StockX locally.
+
+### Prerequisites
+
+Ensure the following tools are installed on your system:
+
+- **PHP**: Version >= 8.2
+- **Composer**: Version >= 2.3
+- **Node.js**: Version >= 18.8.0
+- **NPM**: Version >= 8.18.0
+- **Mailpit**: For email testing
+
+### Installation Steps
+
+#### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/abogo-nono/StocksX.git
 ```
 
-#### Change Directory
+#### 2. Navigate to the Project Directory
 
 ```bash
 cd StocksX
 ```
 
-#### Install Dependencies
+#### 3. Install Dependencies
 
 ```bash
 composer install
@@ -70,21 +102,16 @@ npm install
 
 ### Configuration
 
-#### Configure Environment
+#### 1. Configure Environment Variables
 
-Rename the `.env.example` file to `.env` and fill in your environment configurations.
-
-Example:
+Rename the `.env.example` file to `.env` and update the configurations:
 
 ```dotenv
 APP_NAME=StockX
 APP_ENV=local
 APP_KEY=base64:R6fRMhFwFTaTxPlKDUi+nUYVLLLO8bX+g7AWARu91l8=
 APP_DEBUG=true
-APP_URL=127.0.0.1:8000
-LOG_CHANNEL=stack
-LOG_DEPRECATIONS_CHANNEL=null
-LOG_LEVEL=debug
+APP_URL=http://127.0.0.1:8000
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -103,16 +130,16 @@ MAIL_FROM_ADDRESS="hello@example.com"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-### Setup Database and Tables
+### Database Setup
 
-#### Migrate Tables and Seed Database
+#### 1. Migrate and Seed the Database
 
 ```bash
 php artisan migrate
 php artisan db:seed
 ```
 
-#### Configure Roles and Privileges
+#### 2. Configure Roles and Permissions
 
 ```bash
 php artisan make:filament-user
@@ -121,23 +148,34 @@ php artisan shield:generate --all
 php artisan shield:super-admin --user=1
 ```
 
-### Setup Storage
+### Storage Setup
+
+Create a symbolic link for storage:
 
 ```bash
 php artisan storage:link
 ```
 
-### Run the App
+### Run the Application
+
+#### 1. Start the Development Server
 
 ```bash
-npm run dev
 php artisan serve
 ```
 
-Access the app in your browser at `127.0.0.1:8000`.
+#### 2. Start the Frontend Development Server
 
-## How Can I Improve It?
+```bash
+npm run dev
+```
 
-Your feedback is valuable! If you have any suggestions, feature requests, or encounter any issues during deployment, please let us know. Your input helps us improve the deployment guide and the project itself.
+Access the application at [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
----
+## Feedback and Contributions
+
+We welcome your feedback and contributions! If you encounter any issues or have suggestions for improvement, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
