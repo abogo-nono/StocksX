@@ -19,7 +19,7 @@ class CreateProduct extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $category = ProductSupplier::query()->where('id', $data['product_suppliers_id'])->get('category')->first()->category;
+        $category = ProductSupplier::query()->where('id', $data['product_suppliers_id'])->get('category_id')->first()->category_id;
         $data['product_categories_id'] = $category;
 
         // dd($data);
