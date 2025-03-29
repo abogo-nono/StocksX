@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Tables;
 use App\Models\Order;
 use App\Models\Product;
 use Filament\Forms\Get;
@@ -14,9 +13,9 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\ToggleColumn;
@@ -30,14 +29,7 @@ use Filament\Tables\Actions\RestoreBulkAction;
 use App\Filament\Resources\OrderResource\Pages;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\OrderResource\Pages\EditOrder;
-use App\Filament\Resources\OrderResource\Pages\ViewOrder;
-use App\Filament\Resources\OrderResource\Pages\ListOrders;
-use App\Filament\Resources\OrderResource\RelationManagers;
-use App\Filament\Resources\OrderResource\Pages\CreateOrder;
 use AymanAlhattami\FilamentDateScopesFilter\DateScopeFilter;
-use App\Filament\Resources\OrderResource\Widgets\OrdersChart;
-use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 
 class OrderResource extends Resource
 {
@@ -74,6 +66,7 @@ class OrderResource extends Resource
                     ->collapsible()
                     ->schema([
                         Repeater::make('orderProducts')
+                            ->label('')
                             ->relationship()
                             ->schema([
                                 Select::make('product_id')
@@ -149,7 +142,8 @@ class OrderResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')
-                    ->label('Cashier'),
+                    ->label('Cashier')
+                    ->hidden(!auth()->user()->hasRole('super_admin')),
                 TextColumn::make('client_name')
                     ->searchable(),
                 TextColumn::make('client_phone')
@@ -209,10 +203,59 @@ class OrderResource extends Resource
         return [
             'index' => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
-            'view' => Pages\ViewOrder::route('/{record}'),
-            // 'edit' => Pages\EditOrder::route('/{record}/edit'),
+            // 'view' => Pages\ViewOrder::route('/{record}'),
+            'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
     }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->client_name; // Show client name as title
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return [
+            'client_name',
+            'client_phone',
+            'client_address',
+            'total',
+        ];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Phone' => $record->client_phone,
+            'Address' => $record->client_address,
+            'Total' => $record->total,
+            'Delivered' => $record->delivered ? 'Yes' : 'No',
+        ];
+    }
+
+    public static function getGlobalSearchResultUrl(Model $record): string
+    {
+        return OrderResource::getUrl('view', ['record' => $record]);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $undeliveredOrdersCount = static::getModel()::where('delivered', false)
+            ->withoutTrashed()
+            ->count();
+        return $undeliveredOrdersCount > 0 ? (string) $undeliveredOrdersCount : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::where('delivered', false)->count() > 10 ? 'danger' : 'warning';
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'The number of undelivered orders';
+    }
+
 
     public static function getEloquentQuery(): Builder
     {
