@@ -16,7 +16,7 @@ class ProductSupplier extends Model
         'name',
         'email',
         'phone',
-        'category',
+        'category_id',
     ];
 
     public function product(): BelongsTo
