@@ -9,20 +9,18 @@ use Filament\Widgets\ChartWidget;
 class OrdersChart extends ChartWidget
 {
     protected static ?string $heading = 'Chart';
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected function getData(): array
     {
-        //current year
         $year = Carbon::now()->year;
-        //variable to store each order count as array.
-        $new_orders_count = [];
-        //Looping through the month array to get count for each month in the provided year
-        for ($i = 1; $i <= 12; $i++) {
-            $new_orders_count[] = Order::whereYear('updated_at', $year)
-                ->whereMonth('updated_at', $i)
-                ->count();
-        }
+
+        $new_orders_count = collect(range(1, 12))
+            ->map(function ($month) use ($year) {
+                return Order::whereYear('updated_at', $year)
+                    ->whereMonth('updated_at', $month)
+                    ->count();
+            })->toArray();
 
         return [
             'datasets' => [
