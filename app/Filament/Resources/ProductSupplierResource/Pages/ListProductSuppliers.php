@@ -32,8 +32,8 @@ class ListProductSuppliers extends ListRecords
 
         foreach ($categories as $category) {
             $tabs[$category->title] = Tab::make()
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('category', $category->id))
-                ->badge(ProductSupplier::where('category', $category->id)->count());
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('category_id', $category->id))
+                ->badge(ProductSupplier::where('category_id', $category->id)->count());
         }
 
         return $tabs;
