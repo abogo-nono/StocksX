@@ -50,6 +50,11 @@ class UserOverview extends BaseWidget
                 ->color('primary')
                 ->chart($new_orders_count)
                 ->chartColor('success'),
+            Stat::make('Lowest Stock', Product::where('quantity', '<=', 10)->count())
+                ->description('Total of products with low stock')
+                ->icon('heroicon-m-exclamation-triangle')
+                ->color('danger')
+                ->chartColor('danger'),
         ];
     }
 }
