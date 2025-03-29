@@ -2,27 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
 use Filament\Tables;
 use App\Models\Product;
-use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Infolists;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
-use App\Models\ProductCategory;
-use App\Models\ProductSupplier;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
-use Illuminate\Support\Collection;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProductResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\ProductResource\RelationManagers;
 
 class ProductResource extends Resource
 {
@@ -172,9 +169,75 @@ class ProductResource extends Resource
             ]);
     }
 
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->name; // Show name as title
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return [
+            'name',
+            'price',
+            'quantity',
+        ];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Category' => $record->category->title,
+            'Price' => $record->price,
+            'Quantity' => $record->quantity,
+        ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $lowStockCount = static::getModel()::where('quantity', '<=', '10')
+            ->withoutTrashed()
+            ->count();
+        return $lowStockCount > 0 ? (string) $lowStockCount : null;
+    }
+
     public static function getNavigationBadgeColor(): ?string
     {
-        return 'info';
+        return 'danger';
+    }
+
+    public static function getNavigationBadgeTooltip(): ?string
+    {
+        return 'The number of products with low stock';
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\Section::make([
+                    Infolists\Components\ImageEntry::make('image')
+                        ->label('')
+                ]),
+                Infolists\Components\Section::make([
+                    Infolists\Components\TextEntry::make('supplier.name')
+                        ->color('info')
+                        ->weight('semibold'),
+                    Infolists\Components\TextEntry::make('category.title')
+                        ->color('info')
+                        ->weight('semibold'),
+
+                    Infolists\Components\TextEntry::make('name')
+                        ->color('info')
+                        ->weight('semibold'),
+                    Infolists\Components\TextEntry::make('price')
+                        ->color('info')
+                        ->weight('semibold'),
+                    Infolists\Components\TextEntry::make('quantity')
+                        ->color('info')
+                        ->weight('semibold')
+                ]),
+            ]);
     }
 
 }
