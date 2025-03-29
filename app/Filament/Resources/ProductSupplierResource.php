@@ -3,19 +3,19 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Select;
 use Filament\Tables;
 use Filament\Forms\Form;
-use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Table;
 use App\Models\ProductSupplier;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -24,11 +24,6 @@ use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductSupplierResource\Pages;
-use App\Filament\Resources\ProductSupplierResource\RelationManagers;
-use App\Filament\Resources\ProductSupplierResource\Pages\EditProductSupplier;
-use App\Filament\Resources\ProductSupplierResource\Pages\ViewProductSupplier;
-use App\Filament\Resources\ProductSupplierResource\Pages\ListProductSuppliers;
-use App\Filament\Resources\ProductSupplierResource\Pages\CreateProductSupplier;
 
 class ProductSupplierResource extends Resource
 {
@@ -61,7 +56,7 @@ class ProductSupplierResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),
-                        Select::make('category')
+                        Select::make('category_id')
                             ->relationship('category', 'title')
                             // ->multiple()
                             ->native(false)
@@ -137,5 +132,23 @@ class ProductSupplierResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->name; // Show name as title
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email', 'phone'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Category' => $record->category->title,
+            'Phone' => $record->phone,
+        ];
     }
 }
