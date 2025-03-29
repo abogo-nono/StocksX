@@ -12,23 +12,16 @@ use App\Models\ProductCategory;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductCategoryResource\Pages;
-use App\Filament\Resources\ProductCategoryResource\RelationManagers;
-use App\Filament\Resources\ProductCategoryResource\Pages\EditProductCategory;
-use App\Filament\Resources\ProductCategoryResource\Pages\ViewProductCategory;
-use App\Filament\Resources\ProductCategoryResource\Pages\CreateProductCategory;
-use App\Filament\Resources\ProductCategoryResource\Pages\ListProductCategories;
 
 class ProductCategoryResource extends Resource
 {
@@ -40,6 +33,7 @@ class ProductCategoryResource extends Resource
 
     protected static ?string $navigationGroup = 'Stocks Management';
 
+    protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Form $form): Form
     {
