@@ -79,14 +79,14 @@ echo "||------------------------------------------------------------------"
 php artisan migrate --seed
 
 # create the super admin user
-php artisan make:filament-user --name=Admin --email=admin@example.com --password=12345
+php artisan make:filament-user --name=Admin --email=admin@example.com --password=12345678
 php artisan shield:super-admin --user=1
 
 echo "||------------------------------------------------------------------"
 echo "||====== Here are your credentials"
 echo "||------------------------------------------------------------------"
 echo "Username: admin@example.com"
-echo "Password: 12345"
+echo "Password: 12345678"
 echo
 echo "By default this user will be the superadmin on the app"
 
