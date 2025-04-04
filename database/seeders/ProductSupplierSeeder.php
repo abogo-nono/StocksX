@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProductSupplier;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,7 @@ class ProductSupplierSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        ProductSupplier::truncate()->cascade();
+        ProductSupplier::factory(5)->create();
     }
 }
