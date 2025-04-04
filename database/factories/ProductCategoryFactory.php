@@ -17,7 +17,7 @@ class ProductCategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $title = fake()->word();
+        $title = fake()->unique()->word();
         return [
             'title' => $title,
             'slug' => Str::slug("$title"),
