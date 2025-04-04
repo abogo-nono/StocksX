@@ -48,22 +48,28 @@ StockX offers the following features:
 Here are some screenshots showcasing the StockX application:
 
 - **Dashboard**  
-  ![Dashboard](./screenshots/Screenshot%202024-04-12%20at%2014-03-26%20Dashboard%20-%20StocksX.png)
+  ![Dashboard](./screenshots/127.0.0.1_8000_stocks-manager%20(9).png)
+  ![Dashboard](./screenshots/127.0.0.1_8000_stocks-manager%20(15).png)
 
 - **Products**  
-  ![Products](./screenshots/Screenshot%202024-04-12%20at%2014-04-41%20Products%20-%20StocksX.png)
+  ![Products](./screenshots/127.0.0.1_8000_stocks-manager%20(8).png)
+  ![Products](./screenshots/127.0.0.1_8000_stocks-manager%20(16).png)
 
 - **Orders**  
-  ![Orders](./screenshots/Screenshot%202024-04-12%20at%2014-05-06%20Orders%20-%20StocksX.png)
+  ![Orders](./screenshots/127.0.0.1_8000_stocks-manager%20(7).png)
+  ![Orders](./screenshots/127.0.0.1_8000_stocks-manager_orders.png)
 
 - **Create Order**  
-  ![Create Order](./screenshots/Screenshot%202024-04-12%20at%2014-05-36%20Create%20Order%20-%20StocksX.png)
+  ![Create Order](./screenshots/127.0.0.1_8000_stocks-manager%20(10).png)
 
 - **Roles**  
-  ![Roles](./screenshots/Screenshot%202024-04-12%20at%2014-06-02%20Roles%20-%20StocksX.png)
+  ![Roles](./screenshots/127.0.0.1_8000_stocks-manager%20(12).png)
 
 - **Edit Role**  
-  ![Edit Role](./screenshots/Screenshot%202024-04-12%20at%2014-06-31%20Edit%20cashier%20-%20StocksX.png)
+  ![Edit Role](./screenshots/127.0.0.1_8000_stocks-manager%20(13).png)
+
+- **Low stock email notification**
+  ![Low stock email notifications](./screenshots/Screenshot%20from%202025-04-04%2005-00-18.png)
 
 ## Deployment Guide
 
