@@ -13,6 +13,7 @@ class ProductCategorySeeder extends Seeder
      */
     public function run(): void
     {
+        ProductCategory::truncate()->cascade();
         ProductCategory::factory(10)->create();
     }
 }
