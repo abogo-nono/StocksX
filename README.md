@@ -37,7 +37,6 @@
 - **Secure Login** – Full auth system with email verification.
 - **Permissions System** – Restrict access by user roles for enhanced security.
 
-
 ## 🖼️ Screenshots
 
 Here’s a quick peek at what StockX looks like in action:
@@ -79,7 +78,6 @@ Make sure you have the following installed:
 - **NPM** ≥ 8.18  
 - **Mailpit** – For testing email notifications  
 
-
 ### 📥 Installation Steps
 
 #### 1. Clone the Repository
@@ -98,7 +96,6 @@ composer install
 npm install
 ```
 
-
 ### 🔧 Configuration
 
 #### 1. Set Up `.env`
@@ -113,7 +110,6 @@ DB_PASSWORD=
 MAIL_HOST=localhost
 MAIL_PORT=1025
 ```
-
 
 ### 🗃️ Database Setup
 
@@ -131,12 +127,10 @@ php artisan shield:generate --all
 php artisan shield:super-admin --user=1
 ```
 
-
 ### 🖇️ Storage Linking
 ```bash
 php artisan storage:link
 ```
-
 
 ### 🚀 Run the Application
 
@@ -152,15 +146,12 @@ npm run dev
 
 Access it at [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-
 ## 🤝 Feedback & Contributions
 
 We’d love to hear your thoughts!  
 - 🐛 Found a bug? [Open an issue](https://github.com/abogo-nono/StocksX/issues)  
 - 🌟 Got a feature idea? Share it or [submit a pull request](https://github.com/abogo-nono/StocksX/pulls)
 
-
 ## 📄 License
 
 This project is open-source and available under the **[MIT License](LICENSE)**.
-
