@@ -15,6 +15,6 @@ use App\Http\Controllers\SendMailController;
 */
 
 Route::get('/', function (){
-    return to_route('filament.admin.pages.dashboard');
-});
+    return to_route('filament.admin.auth.login');
+})->name('login');
 
