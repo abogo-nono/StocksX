@@ -1,0 +1,20 @@
+name: Update GitHub Traffic Stats
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Runs every day at 02:00 UTC
+  workflow_dispatch:
+
+jobs:
+  update-traffic-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update traffic stats in README
+        uses: igrigorik/github-traffic-stats@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          readme: README.md
+          section: 'Repository Traffic'
