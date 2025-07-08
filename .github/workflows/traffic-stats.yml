@@ -13,8 +13,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update traffic stats in README
-        uses: zjffun/github-traffic@master
+        uses: gayanvoice/github-traffic@v1.9.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          readme: README.md
+          output: README.md
           section: 'Repository Traffic'
