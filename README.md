@@ -70,81 +70,85 @@ Here’s a quick peek at what StockX looks like in action:
 
 ### 📋 Prerequisites
 
-Make sure you have the following installed:
+You only need **Docker** and **Docker Compose** installed on your system. All other dependencies (PHP, Composer, Node.js, MySQL, etc.) are handled inside containers.
 
-- **PHP** ≥ 8.2  
-- **Composer** ≥ 2.3  
-- **Node.js** ≥ 18.8  
-- **NPM** ≥ 8.18  
-- **Mailpit** – For testing email notifications  
+- **Docker** ≥ 20.10
+- **Docker Compose** ≥ 1.29
 
-### 📥 Installation Steps
+> If you prefer manual installation, see the [Manual Setup](#manual-setup) section below.
+
+### 🐳 Docker Deployment (Recommended)
 
 #### 1. Clone the Repository
 ```bash
 git clone https://github.com/abogo-nono/StocksX.git
-```
-
-#### 2. Navigate into the Project
-```bash
 cd StocksX
 ```
 
-#### 3. Install Dependencies
+#### 2. Copy and Configure Environment Variables
+```bash
+cp .env.example .env
+# Edit .env as needed (DB, mail, etc.)
+```
+
+#### 3. Build and Start the Containers
+```bash
+docker-compose up --build -d
+```
+
+- This will build the app container, set up MySQL, and run all necessary services.
+- All dependencies are installed automatically inside the containers.
+
+#### 4. Run Migrations, Seeders, and Setup Commands
+```bash
+docker-compose exec app php artisan migrate --seed
+docker-compose exec app php artisan storage:link
+docker-compose exec app php artisan make:filament-user
+docker-compose exec app php artisan shield:install --fresh
+docker-compose exec app php artisan shield:generate --all
+docker-compose exec app php artisan shield:super-admin --user=1
+```
+
+#### 5. Access the Application
+- Visit [http://localhost:9000](http://localhost:9000) (or the port you mapped)
+
+---
+
+### 🛠️ Manual Setup (For Development/Advanced Users)
+
+If you want to run the app without Docker, follow these steps:
+
+#### Prerequisites
+- **PHP** ≥ 8.2  
+- **Composer** ≥ 2.3  
+- **Node.js** ≥ 18.8  
+- **NPM** ≥ 8.18  
+- **MySQL** ≥ 8.0  
+- **Mailpit** – For testing email notifications  
+
+#### Installation Steps
+
+1. Install dependencies:
 ```bash
 composer install
 npm install
 ```
-
-### 🔧 Configuration
-
-#### 1. Set Up `.env`
-Rename `.env.example` to `.env` and adjust environment variables:
-```dotenv
-APP_NAME=StockX
-APP_ENV=local
-APP_URL=http://127.0.0.1:8000
-DB_DATABASE=stocksx
-DB_USERNAME=root
-DB_PASSWORD=
-MAIL_HOST=localhost
-MAIL_PORT=1025
-```
-
-### 🗃️ Database Setup
-
-#### 1. Run Migrations and Seeders
+2. Build frontend assets:
 ```bash
-php artisan migrate
-php artisan db:seed
+npm run build
 ```
-
-#### 2. Configure Roles & Permissions
-```bash
-php artisan make:filament-user
-php artisan shield:install --fresh
-php artisan shield:generate --all
-php artisan shield:super-admin --user=1
-```
-
-### 🖇️ Storage Linking
-```bash
-php artisan storage:link
-```
-
-### 🚀 Run the Application
-
-#### Start Laravel Server:
+3. Set up `.env` and database as described above.
+4. Run migrations, seeders, and setup commands as above.
+5. Start the Laravel server:
 ```bash
 php artisan serve
 ```
-
-#### Start Frontend (Vite Dev Server):
+6. (Optional) Start Vite dev server for hot reload:
 ```bash
 npm run dev
 ```
 
-Access it at [http://127.0.0.1:8000](http://127.0.0.1:8000)
+---
 
 ## 🤝 Feedback & Contributions
 
