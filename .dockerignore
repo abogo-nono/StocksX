@@ -1,0 +1,13 @@
+node_modules
+vendor
+storage/app
+storage/framework
+storage/logs
+.env
+.git
+.gitignore
+.idea
+.vscode
+*.log
+npm-debug.log
+dbdata
