@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update traffic stats in README
-        uses: gayanvoice/github-traffic@v1.9.0
+        uses: igrigorik/github-traffic-stats@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: README.md
