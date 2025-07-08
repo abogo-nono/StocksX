@@ -148,12 +148,10 @@ php artisan serve
 npm run dev
 ```
 
----
+<!-- ## 📈 Repository Traffic -->
 
-## 📈 Repository Traffic
-
-- **Stars:** ![GitHub Repo stars](https://img.shields.io/github/stars/abogo-nono/StocksX?style=social)
-- **Forks:** ![GitHub Repo forks](https://img.shields.io/github/forks/abogo-nono/StocksX?style=social)
+<!-- - **Stars:** ![GitHub Repo stars](https://img.shields.io/github/stars/abogo-nono/StocksX?style=social)
+- **Forks:** ![GitHub Repo forks](https://img.shields.io/github/forks/abogo-nono/StocksX?style=social) -->
 
 
 ## 🤝 Feedback & Contributions
