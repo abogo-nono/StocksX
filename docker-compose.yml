@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    image: stocksx-app
+    container_name: stocksx-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+    environment:
+      - APP_ENV=production
+      - APP_KEY=base64:SomeRandomKeyHere
+      - DB_HOST=db
+      - DB_DATABASE=stocksx
+      - DB_USERNAME=stocksx
+      - DB_PASSWORD=stocksx
+    depends_on:
+      - db
+    ports:
+      - "9000:9000"
+
+  db:
+    image: mysql:8.0
+    container_name: stocksx-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: stocksx
+      MYSQL_USER: stocksx
+      MYSQL_PASSWORD: stocksx
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  node:
+    image: node:20
+    container_name: stocksx-node
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    command: sh -c "npm install && npm run build"
+    depends_on:
+      - app
+
+volumes:
+  dbdata:
