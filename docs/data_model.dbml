@@ -1,0 +1,354 @@
+Enum supplier_types {
+  distributor
+  wholesale
+  producer
+}
+
+Enum status {
+  pending
+  approved
+  complete
+  cancel
+}
+
+Enum theme_colors {
+  pink
+  violet
+  gray
+  green
+}
+
+Table tenants {
+  id bigint(20) [pk, increment]
+  name varchar(50) [not null]
+  email varchar(50) [unique, not null]
+  phone varchar(15)
+  logo varchar(255)
+  main_color theme_colors [default: 'gray']
+  address varchar(255)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table users {
+  id bigint(20) [pk, increment]
+  name varchar(50) [not null]
+  email varchar(50) [unique, not null]
+  email_verified_at datetime
+  password varchar(255) [not null]
+  remember_token varchar(255)
+  photo varchar(255)
+  tenant_id bigint(20) [ref: > tenants.id]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table product_categories {
+  id bigint(20) [pk, increment]
+  title varchar(50) [not null]
+  slug varchar(50) [not null]
+  description text
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, slug) [unique]
+  }
+}
+
+Table product_suppliers {
+  id bigint(20) [pk, increment]
+  name varchar(50) [not null]
+  email varchar(50)
+  phone varchar(15)
+  shopname varchar(50)
+  type supplier_types [not null]
+  photo varchar(255)
+  address varchar(255)
+  account_holder varchar(50)
+  account_number varchar(50)
+  bank_name varchar(50)
+  category_id bigint(20) [ref: > product_categories.id]
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, email) [unique]
+  }
+}
+
+Table units {
+  id bigint(20) [pk, increment]
+  name varchar(255) [not null]
+  slug varchar(255) [not null]
+  short_code varchar(255) [not null]
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, slug) [unique]
+    (tenant_id, short_code) [unique]
+  }
+}
+
+Table products {
+  id bigint(20) [pk, increment]
+  name varchar(255) [not null]
+  slug varchar(255) [not null]
+  code varchar(255) [not null]
+  buying_price decimal(10,2) [not null]
+  selling_price decimal(10,2) [not null]
+  quantity int(11) [default: 0]
+  quantity_alert int(11) [default: 10]
+  tax decimal(5,2) [default: 0]
+  tax_type tinyint(4) [default: 1, note: '1=percentage, 2=fixed']
+  notes text
+  product_image varchar(255)
+  category_id bigint(20) [ref: > product_categories.id]
+  supplier_id bigint(20) [ref: > product_suppliers.id]
+  unit_id bigint(20) [ref: > units.id]
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, slug) [unique]
+    (tenant_id, code) [unique]
+  }
+}
+
+Table purchases {
+  id bigint(20) [pk, increment]
+  supplier_id bigint(20) [ref: > product_suppliers.id, not null]
+  date date [not null]
+  purchase_no varchar(255) [not null]
+  status status [default: 'pending']
+  total_amount decimal(10,2) [not null]
+  created_by bigint(20) [ref: > users.id, not null]
+  updated_by bigint(20) [ref: > users.id, default: null]
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, purchase_no) [unique]
+  }
+}
+
+Table purchase_details {
+  id bigint(20) [pk, increment]
+  purchase_id bigint(20) [ref: > purchases.id, not null]
+  product_id bigint(20) [ref: > products.id, not null]
+  quantity int(11) [not null]
+  unitcost decimal(10,2) [not null]
+  total decimal(10,2) [not null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table quotations {
+  id bigint(20) [pk, increment]
+  date date [not null]
+  reference varchar(255) [not null]
+  customer_id bigint(20) [ref: > customers.id, not null]
+  customer_name varchar(255) [not null]
+  tax_percentage decimal(5,2) [default: 0]
+  tax_amount decimal(10,2) [default: 0]
+  discount_percentage decimal(5,2) [default: 0]
+  discount_amount decimal(10,2) [default: 0]
+  shipping_amount decimal(10,2) [default: 0]
+  total_amount decimal(10,2) [not null]
+  status status [default: 'pending']
+  note text
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, reference) [unique]
+  }
+}
+
+Table quotation_details {
+  id bigint(20) [pk, increment]
+  quotation_id bigint(20) [ref: > quotations.id, not null]
+  product_id bigint(20) [ref: > products.id, not null]
+  product_name varchar(255) [not null]
+  product_code varchar(255) [not null]
+  quantity int(11) [not null]
+  price decimal(10,2) [not null]
+  unit_price decimal(10,2) [not null]
+  sub_total decimal(10,2) [not null]
+  product_discount_amount decimal(10,2) [default: 0]
+  product_discount_type varchar(20) [default: 'percentage']
+  product_tax_amount decimal(10,2) [default: 0]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table customers {
+  id bigint(20) [pk, increment]
+  name varchar(50) [not null]
+  email varchar(50)
+  phone varchar(15)
+  address varchar(255)
+  photo varchar(255)
+  account_holder varchar(50)
+  account_number varchar(50)
+  bank_name varchar(50)
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, email) [unique]
+  }
+}
+
+Table orders {
+  id bigint(20) [pk, increment]
+  user_id bigint(20) [ref: > users.id, not null]
+  customer_id bigint(20) [ref: > customers.id, not null]
+  client_name varchar(255) [not null]
+  client_phone varchar(15)
+  client_address varchar(255)
+  order_date date [not null]
+  order_status tinyint(4) [default: 1, note: '1=pending, 2=processing, 3=shipped, 4=delivered, 5=cancelled']
+  delivered boolean [default: false]
+  total_products int(11) [not null]
+  sub_total decimal(10,2) [not null]
+  vat decimal(10,2) [default: 0]
+  total decimal(10,2) [not null]
+  order_no varchar(255) [not null, note: 'Internal order reference number']
+  payment_type varchar(50) [default: 'cash']
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, order_no) [unique]
+  }
+}
+
+Table order_details {
+  id bigint(20) [pk, increment]
+  order_id bigint(20) [ref: > orders.id, not null]
+  product_id bigint(20) [ref: > products.id, not null]
+  quantity int(11) [not null]
+  unitcost decimal(10,2) [not null]
+  total decimal(10,2) [not null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table tenant_settings {
+  id bigint(20) [pk, increment]
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  setting_key varchar(100) [not null]
+  setting_value text
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, setting_key) [unique]
+  }
+}
+
+Table user_roles {
+  id bigint(20) [pk, increment]
+  user_id bigint(20) [ref: > users.id, not null]
+  role_name varchar(50) [not null]
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, user_id, role_name) [unique]
+  }
+}
+
+Table invoices {
+  id bigint(20) [pk, increment]
+  invoice_no varchar(255) [not null]
+  order_id bigint(20) [ref: > orders.id, not null]
+  customer_id bigint(20) [ref: > customers.id, not null]
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+
+  // Invoice Details
+  invoice_date date [not null]
+  due_date date
+  status varchar(20) [default: 'draft', note: 'draft, sent, paid, overdue, cancelled']
+
+  // Financial Data (snapshot at time of invoice creation)
+  subtotal decimal(10,2) [not null]
+  tax_amount decimal(10,2) [default: 0]
+  discount_amount decimal(10,2) [default: 0]
+  shipping_amount decimal(10,2) [default: 0]
+  total_amount decimal(10,2) [not null]
+
+  // Payment Tracking
+  paid_amount decimal(10,2) [default: 0]
+  remaining_amount decimal(10,2) [not null]
+
+  // Customization
+  notes text
+  terms_conditions text
+  invoice_template varchar(50) [default: 'default']
+
+  // Audit
+  created_by bigint(20) [ref: > users.id, not null]
+  sent_at timestamp
+  paid_at timestamp
+
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, invoice_no) [unique]
+    (tenant_id, status)
+    (tenant_id, due_date)
+  }
+}
+
+Table invoice_items {
+  id bigint(20) [pk, increment]
+  invoice_id bigint(20) [ref: > invoices.id, not null]
+  product_id bigint(20) [ref: > products.id]
+
+  // Item details (snapshot from order_details)
+  product_name varchar(255) [not null]
+  product_code varchar(255)
+  description text
+  quantity int(11) [not null]
+  unit_price decimal(10,2) [not null]
+  discount_amount decimal(10,2) [default: 0]
+  tax_amount decimal(10,2) [default: 0]
+  line_total decimal(10,2) [not null]
+
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table payments {
+  id bigint(20) [pk, increment]
+  invoice_id bigint(20) [ref: > invoices.id, not null]
+  tenant_id bigint(20) [ref: > tenants.id, not null]
+
+  payment_method varchar(50) [not null, note: 'cash, card, bank_transfer, check, etc.']
+  amount decimal(10,2) [not null]
+  payment_date date [not null]
+  reference_no varchar(255)
+  notes text
+
+  created_by bigint(20) [ref: > users.id, not null]
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+    (tenant_id, payment_date)
+    (invoice_id)
+  }
+}

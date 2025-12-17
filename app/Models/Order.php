@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\OrderProduct;
+use App\Models\OrderDetail;
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use LaracraftTech\LaravelDateScopes\DateScopes;
@@ -12,37 +14,128 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
-    use HasFactory, SoftDeletes, DateScopes;
+    use HasFactory, SoftDeletes, DateScopes, BelongsToTenant;
 
     protected $fillable = [
+        'tenant_id',
         'user_id',
+        'customer_id',
+        'order_no',
         'client_name',
         'client_phone',
         'client_address',
+        'order_status',
+        'sub_total',
+        'vat',
+        'discount_amount',
         'total',
+        'total_products',
+        'payment_type',
+        'order_date',
+        'delivery_date',
         'delivered',
+        'notes',
     ];
+
+    protected $casts = [
+        'subtotal' => 'decimal:2',
+        'tax_amount' => 'decimal:2',
+        'discount_amount' => 'decimal:2',
+        'total' => 'decimal:2',
+        'order_date' => 'date',
+        'delivery_date' => 'date',
+        'delivered' => 'boolean',
+    ];
+
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
+    }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // public function products()
-    // {
-    //     return $this->belongsToMany(Product::class)
-    //         ->withPivot('quantity', 'price')
-    //         ->withTimestamps();
-    // }
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
 
+    // Legacy relationship - keep for backward compatibility
     public function orderProducts(): HasMany
     {
         return $this->hasMany(OrderProduct::class);
     }
 
+    // New detailed relationship
+    public function orderDetails(): HasMany
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Generate order number automatically
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($order) {
+            if (!$order->order_number) {
+                $order->order_number = 'ORD-' . date('Y') . '-' . str_pad(
+                    static::whereYear('created_at', date('Y'))->count() + 1,
+                    6,
+                    '0',
+                    STR_PAD_LEFT
+                );
+            }
+        });
+    }
+
+    /**
+     * Calculate total amount from order details
+     */
+    public function calculateTotals()
+    {
+        $this->subtotal = $this->orderDetails->sum('total_price');
+        $this->tax_amount = $this->orderDetails->sum('tax_amount');
+        $this->total = $this->subtotal + $this->tax_amount - $this->discount_amount;
+        $this->save();
+    }
+
+    /**
+     * Get total paid amount
+     */
+    public function getTotalPaidAttribute(): float
+    {
+        return $this->payments()->completed()->sum('amount');
+    }
+
+    /**
+     * Get balance due
+     */
+    public function getBalanceDueAttribute(): float
+    {
+        return $this->total - $this->total_paid;
+    }
+
+    /**
+     * Check if order is fully paid
+     */
+    public function getIsFullyPaidAttribute(): bool
+    {
+        return $this->balance_due <= 0;
+    }
 }
+
 // query by SECONDS
-Order::ofJustNow(); // query Orders created just now
+// Order::ofJustNow(); // query Orders created just now
 Order::ofLastSecond(); // query Orders created during the last second
 Order::ofLast15Seconds(); // query Orders created during the last 15 seconds
 Order::ofLast30Seconds(); // query Orders created during the last 30 seconds

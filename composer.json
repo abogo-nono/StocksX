@@ -1,17 +1,20 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "A stocks management system built with Laravel and Filament. It provides a user-friendly interface for managing stock data, including adding, updating, and deleting stock items. The system also includes features for tracking stock levels, generating reports, and managing user access.",
     "keywords": [
         "laravel",
-        "framework"
+        "filament",
+        "stocks",
+        "management"
     ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
         "aymanalhattami/filament-date-scopes-filter": "^1.0",
-        "bezhansalleh/filament-shield": "^3.1",
+        "bezhansalleh/filament-shield": "^2",
         "filament/filament": "^3.1",
+        "flowframe/laravel-trend": "^0.4.0",
         "guzzlehttp/guzzle": "^7.2",
         "icetalker/filament-table-repeater": "^1.1",
         "laravel/framework": "^10.10",

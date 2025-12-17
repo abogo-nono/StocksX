@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Tenant;
+use App\Models\Customer;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
@@ -35,11 +37,11 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Stocks Management';
+    protected static ?string $navigationGroup = 'Sales Management';
 
     public static function form(Form $form): Form
     {

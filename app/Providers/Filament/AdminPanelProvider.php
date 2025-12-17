@@ -21,6 +21,15 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use App\Filament\Resources\OrderResource\Widgets\OrdersChart;
 use App\Filament\Resources\UserResource\Widgets\UserOverview;
+use App\Filament\Widgets\FinancialOverview;
+use App\Filament\Widgets\SalesChart;
+use App\Filament\Widgets\RecentOrders;
+use App\Filament\Widgets\TopProducts;
+use App\Filament\Widgets\LowStockAlert;
+use App\Filament\Widgets\InvoicesOverview;
+use App\Filament\Widgets\PaymentsChart;
+use App\Filament\Widgets\OutstandingInvoices;
+use App\Models\Tenant;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -35,6 +44,9 @@ class AdminPanelProvider extends PanelProvider
             ->registration()
             ->emailVerification()
             ->passwordReset()
+            ->tenant(Tenant::class)
+            ->tenantRegistration(\App\Filament\Pages\Tenancy\RegisterTenant::class)
+            ->tenantProfile(\App\Filament\Pages\Tenancy\EditTenantProfile::class)
             ->colors([
                 'primary' => Color::Cyan,
             ])
@@ -45,6 +57,21 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                // Overview Widgets (Row 1)
+                FinancialOverview::class,
+                InvoicesOverview::class,
+
+                // Charts (Row 2)
+                SalesChart::class,
+                PaymentsChart::class,
+
+                // Data Tables (Row 3)
+                RecentOrders::class,
+                OutstandingInvoices::class,
+
+                // Additional Widgets (Row 4)
+                TopProducts::class,
+                LowStockAlert::class,
                 UserOverview::class,
                 OrdersChart::class,
             ])
@@ -58,6 +85,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                \App\Http\Middleware\TenantMiddleware::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
@@ -66,8 +94,12 @@ class AdminPanelProvider extends PanelProvider
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
             ])
             ->navigationGroups([
+                'Sales Management',
                 'Stocks Management',
-                'Users Management'
+                'Customer Management',
+                'Financial Management',
+                'Users Management',
+                'System Management'
             ])
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->brandLogo(asset('images/logo.png'))
