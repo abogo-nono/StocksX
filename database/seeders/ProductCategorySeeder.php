@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\ProductCategory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProductCategorySeeder extends Seeder
@@ -13,7 +12,16 @@ class ProductCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        ProductCategory::truncate()->cascade();
-        ProductCategory::factory(10)->create();
+        // Create product categories with real values
+        $categories = [
+            ['title' => 'Electronics', 'slug' => 'electronics'],
+            ['title' => 'Furniture', 'slug' => 'furniture'],
+            ['title' => 'Clothing', 'slug' => 'clothing'],
+            ['title' => 'Books', 'slug' => 'books'],
+            ['title' => 'Toys', 'slug' => 'toys'],
+        ];
+        foreach ($categories as $category) {
+            ProductCategory::create($category);
+        }
     }
 }

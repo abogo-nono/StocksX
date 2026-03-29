@@ -1,0 +1,33 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+@layer base {
+    .fi-body {
+        background:
+            linear-gradient(180deg, rgba(240, 249, 255, 0.95), rgba(240, 249, 255, 0) 16rem),
+            linear-gradient(180deg, #f8fafc, #eef2f7);
+    }
+
+    .dark .fi-body {
+        background:
+            linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0) 18rem),
+            linear-gradient(180deg, #020617, #0f172a);
+    }
+}
+
+@layer components {
+    .fi-main {
+        @apply rounded-[2rem];
+    }
+
+    .fi-page {
+        @apply gap-y-6;
+    }
+
+    .fi-sidebar-header,
+    .fi-topbar,
+    .fi-sidebar {
+        @apply bg-transparent;
+    }
+}

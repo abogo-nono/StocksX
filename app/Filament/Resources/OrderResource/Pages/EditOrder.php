@@ -2,18 +2,24 @@
 
 namespace App\Filament\Resources\OrderResource\Pages;
 
-use App\Models\User;
-use Filament\Actions;
-use App\Models\Product;
+use App\Filament\Resources\OrderResource;
 use App\Mail\LowStockAlert;
-use Illuminate\Support\Facades\Mail;
+use App\Models\Product;
+use App\Models\User;
+use App\Support\Orders\OrderStockManager;
+use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
-use App\Filament\Resources\OrderResource;
+use Illuminate\Support\Facades\Mail;
 
 class EditOrder extends EditRecord
 {
     protected static string $resource = OrderResource::class;
+
+    /**
+     * @var array<int, int>
+     */
+    protected array $originalQuantities = [];
 
     protected function getHeaderActions(): array
     {
@@ -27,10 +33,12 @@ class EditOrder extends EditRecord
 
     protected function beforeSave(): void
     {
-        if ($this->data['delivered']) {
+        $this->originalQuantities = OrderStockManager::originalQuantities($this->record);
+
+        if ($this->record->delivered) {
             Notification::make()
                 ->warning()
-                ->title("Order cannot be edited")
+                ->title('Order cannot be edited')
                 ->body('The order has already been delivered and cannot be edited.')
                 ->persistent()
                 ->send();
@@ -38,57 +46,24 @@ class EditOrder extends EditRecord
             $this->halt();
         }
 
-        foreach ($this->data['orderProducts'] as $order) {
-            $product = Product::find($order['product_id']);
+        $errorMessage = OrderStockManager::validate($this->data['orderProducts'] ?? [], $this->originalQuantities);
 
-            if (!$product) {
-                Notification::make()
-                    ->error()
-                    ->title("Product not found")
-                    ->body('The product with ID ' . $order['product_id'] . ' does not exist.')
-                    ->persistent()
-                    ->send();
+        if ($errorMessage) {
+            Notification::make()
+                ->warning()
+                ->title('Unable to update this order')
+                ->body($errorMessage)
+                ->persistent()
+                ->send();
 
-                $this->halt();
-            }
-
-            $originalOrder = $this->record->orderProducts->firstWhere('product_id', $order['product_id']);
-            $originalQuantity = $originalOrder ? $originalOrder->quantity : 0;
-
-            $availableQuantity = $product->quantity + $originalQuantity;
-
-            if ($availableQuantity < $order['quantity']) {
-                Notification::make()
-                    ->warning()
-                    ->title("Insufficient stock")
-                    ->body('The quantity needed for the product ' . $product->name . ' is not available. Available quantity is: ' . $availableQuantity)
-                    ->persistent()
-                    ->send();
-
-                $this->halt();
-            }
-        }
-
-        foreach ($this->data['orderProducts'] as $order) {
-            $product = Product::find($order['product_id']);
-
-            if ($product) {
-                $originalOrder = $this->record->orderProducts->firstWhere('product_id', $order['product_id']);
-                $originalQuantity = $originalOrder ? $originalOrder->quantity : 0;
-
-                if ($order['quantity'] > $originalQuantity) {
-                    // Decrease stock if the new quantity is greater than the original
-                    $product->decrement('quantity', $order['quantity'] - $originalQuantity);
-                } elseif ($order['quantity'] < $originalQuantity) {
-                    // Increase stock if the new quantity is less than the original
-                    $product->increment('quantity', $originalQuantity - $order['quantity']);
-                }
-            }
+            $this->halt();
         }
     }
 
     protected function afterSave(): void
     {
+        OrderStockManager::sync($this->data['orderProducts'] ?? [], $this->originalQuantities);
+
         $lowStockProducts = Product::where('quantity', '<=', 10)->get(['name', 'quantity']);
 
         if ($lowStockProducts->isNotEmpty()) {
